@@ -61,7 +61,6 @@ defmodule Geo.Filter.Radius do
       [first_entry | _rest] = city_entries
       {_id, rec} = first_entry
 
-
       city_distance =
         Haversine.distance_miles(
           lat,
