@@ -1,24 +1,33 @@
-defmodule GeoBound.MixProject do
+defmodule Geo.MixProject do
   use Mix.Project
 
   def project do
     [
-      apps_path: "apps",
+      app: :geo,
       version: "0.1.0",
+      elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
   end
 
-  # Dependencies listed here are available only for this
-  # project and cannot be accessed from applications inside
-  # the apps folder.
-  #
-  # Run "mix help deps" for examples and options.
+  # Run "mix help compile.app" to learn about applications.
+  def application do
+    [
+      mod: {Geo.Application, []},
+      extra_applications: [:logger]
+    ]
+  end
+
+  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:excoveralls, "~> 0.9"},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+      {:poison, ">= 0.0.0"},
+      {:ex2ms, "~> 1.0"},
+      {:elixir_uuid, "~> 1.2"},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      # test
+      {:excoveralls, "~> 0.7", only: :test}
     ]
   end
 end

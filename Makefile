@@ -8,17 +8,29 @@ DATA_DIR := $(ROOT_DIR)/data
 
 DOCKER_IMAGE := geonames-processor
 
+# Detect container runtime (docker preferred, fallback to podman)
+DOCKER := $(shell command -v docker 2>/dev/null)
+PODMAN := $(shell command -v podman 2>/dev/null)
+
+ifeq ($(DOCKER),)
+  ifeq ($(PODMAN),)
+    $(error Neither docker nor podman is installed)
+  else
+    CONTAINER_RUNTIME := podman
+  endif
+else
+  CONTAINER_RUNTIME := docker
+endif
+
 .PHONY: help deps compile clean test test-all fmt fmt-check credo dialyzer cover \
-        docker-build docker-run docker docker-clean ci
+	data-pipeline-build data-pipeline-run data-pipeline ci 
 
 help:
 	@echo "Targets:"
 	@echo "  deps            Fetch deps"
 	@echo "  compile         Compile umbrella"
 	@echo "  test            Run tests"
-	@echo "  docker-build    Build GeoNames Docker image"
-	@echo "  docker-run      Run GeoNames Docker container"
-	@echo "  docker          Build + run GeoNames container"
+	@echo "  data-pipeline   process geonames data"
 	@echo "  ci              CI pipeline"
 
 deps:
@@ -57,18 +69,21 @@ cover:
 # Docker (scripts/ directory)
 # --------------------------------------------------
 
-docker-build:
+data-pipeline-build:
 	cd $(SCRIPTS_DIR) && \
-	docker build -t $(DOCKER_IMAGE) .
+	$(CONTAINER_RUNTIME) build -t $(DOCKER_IMAGE) .
 
-docker-run:
-	docker run --rm \
-		-v "$(DATA_DIR):/data" \
+data-pipeline-run:
+	$(CONTAINER_RUNTIME) run --rm \
+		-v "$(DATA_DIR):/data:Z" \
 		$(DOCKER_IMAGE)
 
-docker: docker-build docker-run
+data-pipeline: data-pipeline-build data-pipeline-run
 
-docker-clean:
-	docker rmi $(DOCKER_IMAGE) || true
+data-pipeline-clean:
+	$(CONTAINER_RUNTIME) rmi $(DOCKER_IMAGE) || true
 
-ci: deps fmt-check compile test credo docker-build
+# --------------------------------------------------
+# CI Steps
+# --------------------------------------------------
+ci: deps fmt-check compile test credo

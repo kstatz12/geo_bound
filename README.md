@@ -1,44 +1,21 @@
-[![CI](https://github.com/kstatz12/geo_bound/actions/workflows/ci.yml/badge.svg)](https://github.com/kstatz12/geo_bound/actions/workflows/ci.yml)
-# GeoBound
+# Geo
 
-GeoBound is an elixir library to support efficient geoqueries. 
+**TODO: Add description**
 
-## Data Setup
-this depends on data from [geonames](https://www.geonames.org/)
-### Docker
+## Installation
 
-Build the docker container for processing geonames data
+If [available in Hex](https://hex.pm/docs/publish), the package can be installed
+by adding `geo` to your list of dependencies in `mix.exs`:
 
-``` sh
-docker build -t geonames-process scripts/.
+```elixir
+def deps do
+  [
+    {:geo, "~> 0.1.0"}
+  ]
+end
 ```
 
-you will need do mount a directory. 
-
-``` sh
-mkdir data \\
-docker run --rm -v "$PWD/data:/data:Z" geonames-process
-```
-
-This will
-- download the geonames data for the US and Canada
-- unzip the archives
-- run the `process.py` script over the data to transform it into the right shape
-
-## Configuration
-to use GeoBound you need to configure the data location
-
-``` elixir
-Application.put_env(:geo, :data_file_path, "data/geonames.json")
-```
-
-you cna optionally also set a name for the `:ets` table in case you are running multiple copies
-
-
-``` elixir
-Application.put_env(:geo, :geo_table_name, :some_atom)
-```
-
-
-
+Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
+and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
+be found at <https://hexdocs.pm/geo>.
 

@@ -17,6 +17,7 @@ import argparse
 import json
 import re
 import sys
+import math
 from pathlib import Path
 from typing import Dict, List
 
@@ -77,6 +78,13 @@ POSTAL_COLUMNS = [
     "accuracy",
 ]
 
+def clean(v):
+    if isinstance(v, float) and math.isnan(v):
+        return None
+    return v
+
+def clean_row(row):
+    return {k: clean(v) for k, v in row.items()}
 
 def parse_args(argv: List[str]) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Process GeoNames files into JSON.")
@@ -268,8 +276,9 @@ def main(argv: List[str]) -> int:
 
     if verbose:
         vprint(verbose, f"writing to file: {output_path}")
-
-    Path(output_path).write_text(json.dumps(rows, ensure_ascii=False), encoding="utf-8")
+        
+    rows = [clean_row(r) for r in rows]
+    Path(output_path).write_text(json.dumps(rows, ensure_ascii=False, allow_nan=False), encoding="utf-8")
     return 0
 
 
