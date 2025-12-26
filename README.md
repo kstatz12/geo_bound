@@ -1,3 +1,4 @@
+[![CI](https://github.com/kstatz12/geo_bound/actions/workflows/ci.yml/badge.svg)](https://github.com/kstatz12/geo_bound/actions/workflows/ci.yml)
 # GeoBound
 
 GeoBound is an elixir library to support efficient geoqueries. 
