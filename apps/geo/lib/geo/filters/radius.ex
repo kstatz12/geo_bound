@@ -3,9 +3,9 @@ defmodule Geo.Filter.Radius do
   radius based geo filters
   """
 
-  alias Geo.Math.{Haversine, GeoCenter}
-  alias Geo.Servers.QueryServer
+  alias Geo.Math.{GeoCenter, Haversine}
   alias Geo.{Queries, StringFilter}
+  alias Geo.Servers.QueryServer
 
   def postal_code(results, postal_code, max_distance \\ 10) do
     resolve_to_location(postal_code)
@@ -23,11 +23,9 @@ defmodule Geo.Filter.Radius do
         []
 
       records ->
-        with {lat, lng} <- List.first(records) do
-          radius_filter(results, lat, lng, max_distance)
-        else
-          _ ->
-            []
+        case List.first(records) do
+          {lat, lng} -> radius_filter(results, lat, lng, max_distance)
+          _ -> []
         end
     end
   end
@@ -95,7 +93,7 @@ defmodule Geo.Filter.Radius do
     end)
     # Filter cities within max_distance and that have at least one postal code
     |> Enum.filter(fn {_city_name, city_data} ->
-      city_data.distance <= max_distance and length(city_data.postal_codes) > 0
+      city_data.distance <= max_distance and Enum.empty?(city_data.postal_codes)
     end)
     |> Enum.into(%{})
   end

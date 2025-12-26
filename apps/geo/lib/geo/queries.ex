@@ -7,31 +7,31 @@ defmodule Geo.Queries do
 
   # lookup queries
 
-  def all() do
+  def all do
     fun do
       location -> location
     end
   end
 
-  def states() do
+  def states do
     fun do
       {_id, %{state_code: value}} -> value
     end
   end
 
-  def cities() do
+  def cities do
     fun do
       {_id, %{city_name: value}} -> value
     end
   end
 
-  def postal_codes() do
+  def postal_codes do
     fun do
       {_id, %{postal_code: value}} -> value
     end
   end
 
-  def postal_codes_data() do
+  def postal_codes_data do
     fun do
       {_id, %{postal_code: postal_code, latitude: latitude, longitude: longitude}} ->
         {

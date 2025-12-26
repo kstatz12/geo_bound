@@ -1,10 +1,9 @@
 defmodule Geo.Filter.FuzzyTest do
   use ExUnit.Case, async: true
 
-  alias Geo.{Queries}
+  alias Geo.Filter.{Exists, Fuzzy}
+  alias Geo.Queries
   alias Geo.Servers.QueryServer
-
-  alias Geo.Filter.{Fuzzy, Exists}
 
   test "starts with" do
     assert [] !=

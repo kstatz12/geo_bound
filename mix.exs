@@ -16,6 +16,9 @@ defmodule GeoBound.MixProject do
   #
   # Run "mix help deps" for examples and options.
   defp deps do
-    [{:excoveralls, "~> 0.9"}]
+    [
+      {:excoveralls, "~> 0.9"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+    ]
   end
 end

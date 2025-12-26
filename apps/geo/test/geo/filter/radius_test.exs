@@ -1,8 +1,8 @@
 defmodule Geo.Filter.RadiusTest do
   use ExUnit.Case, async: false
 
-  alias Geo.{Queries}
-  alias Geo.Servers.{QueryServer}
+  alias Geo.Queries
+  alias Geo.Servers.QueryServer
 
   alias Geo.Filter.Radius
 

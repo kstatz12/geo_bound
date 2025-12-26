@@ -1,10 +1,9 @@
 defmodule Geo.Filter.ExistsTest do
   use ExUnit.Case, async: true
 
-  alias Geo.{Queries}
-  alias Geo.Servers.{QueryServer}
-
   alias Geo.Filter.Exists
+  alias Geo.Queries
+  alias Geo.Servers.QueryServer
 
   test "city in state has results" do
     assert {:ok, _} =
