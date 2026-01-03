@@ -42,6 +42,12 @@ defmodule Geo.Queries do
     end
   end
 
+  def postal_codes_for_state(state_code) do
+    fun do
+      {_id, %{postal_code: pc, state_code: ^state_code}} -> pc
+    end
+  end
+
   def postal_code_data(postal_code) do
     fun do
       {_id, %{postal_code: ^postal_code, latitude: latitude, longitude: longitude}} ->
@@ -49,6 +55,26 @@ defmodule Geo.Queries do
           latitude,
           longitude
         }
+    end
+  end
+
+  def city_records(city_name, state_code) do
+    fun do
+      {_id,
+       %{
+         city_name: ^city_name,
+         state_code: ^state_code,
+         city_latitude: lat,
+         city_longitude: lon,
+         alt_name: an
+       }} ->
+        {lat, lon, an}
+    end
+  end
+
+  def postal_code_records(pc) do
+    fun do
+      {_id, %{postal_code: ^pc, city_name: cn, state_code: sc, latitude: lat, longitude: lng}} -> { cn, sc, lat, lng }
     end
   end
 

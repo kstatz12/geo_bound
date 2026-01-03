@@ -2,7 +2,7 @@ defmodule Geo.Filter.Fuzzy do
   @moduledoc """
   fuzzy matching for expanding locations
   """
-  alias Geo.StringFilter
+  alias Geo.Filter.StringFilter
 
   def starts_with(results, term, selector \\ fn x -> x end) do
     results |> StringFilter.filter(term, :begins_with, selector)

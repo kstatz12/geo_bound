@@ -1,4 +1,4 @@
-defmodule Geo.StringFilter do
+defmodule Geo.Filter.StringFilter do
   @moduledoc """
   Provides a function to filter strings based on a multi-word query using
   one of the following operations:

@@ -1,5 +1,5 @@
 # coveralls-ignore-start
-defmodule Geonames.ConcaveHull do
+defmodule Geo.Math.ConcaveHull do
   @moduledoc """
   Compute the concave hull of a set of points using the k-nearest neighbors algorithm.
   Returns a list of points representing the hull.

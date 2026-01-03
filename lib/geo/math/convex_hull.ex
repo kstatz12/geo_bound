@@ -1,5 +1,5 @@
 # coveralls-ignore-start
-defmodule Geo.ConvexHull do
+defmodule Geo.Math.ConvexHull do
   @moduledoc """
   Compute the convex hull of a set of points using Graham's scan algorithm.
   Returns a list of points representing the hull in counter-clockwise order.
