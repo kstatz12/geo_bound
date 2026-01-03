@@ -26,7 +26,6 @@ defmodule Geo.Filter.StringFilter do
     Enum.reject(results, fn r -> match_prefixes(words, split(selector.(r)), operation_type) end)
   end
 
-
   # if we made it all the way through with no misses, true
   def match_prefixes([], [], _), do: true
   # if we exhausted the search terms, but there are still elements

@@ -74,7 +74,7 @@ defmodule Geo.Queries do
 
   def postal_code_records(pc) do
     fun do
-      {_id, %{postal_code: ^pc, city_name: cn, state_code: sc, latitude: lat, longitude: lng}} -> { cn, sc, lat, lng }
+      {_id, %{postal_code: ^pc, city_name: cn, state_code: sc, latitude: lat, longitude: lng}} -> {cn, sc, lat, lng}
     end
   end
 

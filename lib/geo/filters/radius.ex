@@ -3,10 +3,10 @@ defmodule Geo.Filter.Radius do
   radius based geo filters
   """
 
+  alias Geo.Filter.StringFilter
   alias Geo.Math.{GeoCenter, Haversine}
   alias Geo.Queries
   alias Geo.Servers.QueryServer
-  alias Geo.Filter.StringFilter
 
   def postal_code(results, postal_code, max_distance \\ 10) do
     resolve_to_location(postal_code)

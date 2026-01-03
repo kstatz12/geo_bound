@@ -1,4 +1,4 @@
-defmodule Geo.Fence do
+defmodule Geo.Math.Fence do
   @moduledoc """
   Point-in-convex-polygon test for a convex hull (CW or CCW).
 
@@ -36,35 +36,40 @@ defmodule Geo.Fence do
 
   # --- Core test (O(n)) ---
   defp convex_contains?(hull, p, eps, include_boundary?) do
-    # Determine expected orientation sign from first non-zero cross
-    expected =
-      hull
-      |> edges()
-      |> Enum.reduce_while(nil, fn {a, b}, acc ->
-        c = cross(a, b, p)
+    edges = edges(hull)
+    expected = expected_sign(edges, p, eps)
 
-        cond do
-          near_zero?(c, eps) -> {:cont, acc}
-          true -> {:halt, sign(c)}
-        end
-      end)
-
-    # If all crosses are ~0, polygon is degenerate or point lies on same line;
-    # treat as "inside" only if boundary counts.
     if expected == nil do
       include_boundary?
     else
-      Enum.all?(edges(hull), fn {a, b} ->
-        c = cross(a, b, p)
+      Enum.all?(edges, &edge_ok?(&1, p, eps, expected, include_boundary?))
+    end
+  end
 
-        cond do
-          near_zero?(c, eps) ->
-            include_boundary? and on_segment?(a, b, p, eps)
+  defp expected_sign(edges, p, eps) do
+    Enum.reduce_while(edges, nil, fn {a, b}, _acc ->
+      c = cross(a, b, p)
 
-          true ->
-            sign(c) == expected
-        end
-      end)
+      if near_zero?(c, eps) do
+        {:cont, nil}
+      else
+        {:halt, sign(c)}
+      end
+    end)
+  end
+
+  defp edge_ok?({a, b}, p, eps, expected, include_boundary?) do
+    c = cross(a, b, p)
+
+    cond do
+      not near_zero?(c, eps) ->
+        sign(c) == expected
+
+      include_boundary? ->
+        on_segment?(a, b, p, eps)
+
+      true ->
+        false
     end
   end
 
@@ -101,6 +106,7 @@ defmodule Geo.Fence do
   end
 
   defp edges([_a, _b] = hull), do: [{Enum.at(hull, 0), Enum.at(hull, 1)}]
+
   defp edges(hull) do
     hull
     |> Enum.with_index()
@@ -134,7 +140,8 @@ defmodule Geo.Fence do
   defp in_bbox?(hull, {plat, plng}, eps) do
     {min_lat, max_lat, min_lng, max_lng} =
       Enum.reduce(hull, {1.0e99, -1.0e99, 1.0e99, -1.0e99}, fn {lat, lng},
-                                                                  {min_lat, max_lat, min_lng, max_lng} ->
+                                                               {min_lat, max_lat, min_lng,
+                                                                max_lng} ->
         {min(min_lat, lat), max(max_lat, lat), min(min_lng, lng), max(max_lng, lng)}
       end)
 
