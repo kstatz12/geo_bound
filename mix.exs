@@ -15,6 +15,7 @@ defmodule Geo.MixProject do
   def application do
     [
       mod: {Geo.Application, []},
+      applications: [:geohash],
       extra_applications: [:logger]
     ]
   end
@@ -28,7 +29,8 @@ defmodule Geo.MixProject do
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       # test
       {:excoveralls, "~> 0.7", only: :test},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:geohash, "~> 1.0"}
     ]
   end
 end
