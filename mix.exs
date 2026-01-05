@@ -15,8 +15,7 @@ defmodule Geo.MixProject do
   def application do
     [
       mod: {Geo.Application, []},
-      applications: [:geohash],
-      extra_applications: [:logger]
+      extra_applications: [:logger, :geohash]
     ]
   end
 
